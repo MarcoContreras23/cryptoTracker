@@ -19,10 +19,10 @@ class CoinsScreen extends Component {
         this.setState({ coins: res.data, loading: false });
     }
 
-    handlePress = () => {
-        console.log("Go to detail", this.props);
+    handlePress = (coin) => {
 
-        this.props.navigation.navigate('CoinDetail');
+
+        this.props.navigation.navigate('CoinDetail',{ coin });
 
     }
 
@@ -34,7 +34,7 @@ class CoinsScreen extends Component {
             <View style={styles.container}>
                 {loading ?
                     <ActivityIndicator
-                        style = {styles.loader}
+                        style={styles.loader}
                         color="#fff"
                         size="large"
                     />
@@ -43,7 +43,10 @@ class CoinsScreen extends Component {
                 <FlatList
                     data={coins}
                     renderItem={({ item }) =>
-                        <CoinsItem item={item}></CoinsItem>
+                        <CoinsItem
+                            item={item}
+                            onPress={() => this.handlePress(item)}>
+                        </CoinsItem>
                     }
                 />
             </View>
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
         color: "#fff",
         textAlign: "center"
     },
-    loader:{
+    loader: {
         marginTop: 60
     }
 
