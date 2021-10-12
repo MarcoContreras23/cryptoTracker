@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, Image, StyleSheet, SectionList } from 'react-native';
+import { Text, View, Image, StyleSheet, SectionList, FlatList } from 'react-native';
 import Colors from 'cryptoTracker/src/res/colors';
+import Http from 'cryptoTracker/src/libs/http';
+import CoinMarkertItem from './CoinMarketItem';
 
 
 class CoinDetailscreen extends Component {
 
     state = {
-        coin: {}
+        coin: {},
+        markets: []
     }
 
     getSymbolIcon = (name) => {
@@ -38,24 +41,34 @@ class CoinDetailscreen extends Component {
         return sections;
     }
 
+    getMarkets = async (coinId) => {
+
+
+        const url = `https://api.coinlore.net/api/coin/markets/?id=${coinId}`
+        const markets = await Http.instance.get(url);
+        this.setState({ markets });
+    }
+
     componentDidMount() {
         const { coin } = this.props.route.params;
 
         this.props.navigation.setOptions({ title: coin.symbol });
+
+        this.getMarkets(coin.id);
 
         this.setState({ coin });
     }
 
     render() {
 
-        const { coin } = this.state;
+        const { coin, markets } = this.state;
         return (
             <View style={styles.cointainer}>
                 <View style={styles.subHeader} >
                     <Image style={styles.iconImg} source={{ uri: this.getSymbolIcon(coin.name) }} />
                     <Text style={styles.titleTxt} >{coin.name}</Text>
                 </View>
-                <SectionList
+                <SectionList style={styles.section}
                     sections={this.getSections(coin)}
                     keyExtractor={(item => item)}
                     renderItem={({ item }) =>
@@ -68,6 +81,13 @@ class CoinDetailscreen extends Component {
                             <Text style={styles.sectionTxt} >{section.title}</Text>
                         </View>
                     }
+                />
+                <Text style={styles.marketsTitle} >Markets</Text>
+                <FlatList
+                    style={styles.list}
+                    horizontal={true}
+                    data={markets}
+                    renderItem={({ item }) => <CoinMarkertItem item={item} />}
                 />
             </View>
 
@@ -97,6 +117,13 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25
     },
+    section: {
+        maxHeight: 220
+    },
+    list: {
+        maxHeight: 100,
+        paddingLeft: 16
+    },
     sectionHeader: {
         backgroundColor: "rgba(0,0,0,0.2)",
         padding: 8
@@ -112,6 +139,14 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontSize: 14,
         fontWeight: "bold"
+    },
+    marketsTitle: {
+        color: Colors.white,
+        fontSize: 16,
+        marginBottom: 16,
+        marginLeft: 16,
+        fontWeight: "bold"
+
     }
 
 });

@@ -9,7 +9,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import CoinsStack  from './src/components/coins/CoinsStack';
-import CoinDetailscreen from './src/components/coins/CoinDetailScreen';
+
 //import type {Node} from 'react';
 
 /*const Section = ({children, title}): Node => {

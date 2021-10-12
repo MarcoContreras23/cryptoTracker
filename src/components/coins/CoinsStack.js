@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CoinsScreen from "./CoinsScreen";
-import CoinDetailscreen from "./CoinDetailScreen";
+import CoinDetailscreen from "../coinDetail/CoinDetailScreen";
 import Colors from 'cryptoTracker/src/res/colors';
 
 
