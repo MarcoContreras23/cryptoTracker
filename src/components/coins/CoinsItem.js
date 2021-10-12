@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.zircon,
         borderBottomWidth: 1,
         marginLeft: Platform.OS == 'android' ? 16 :0,
-        marginRight:  Platform.OS == 'android' ? 16 :0
+        marginRight:  Platform.OS == 'android' ? 16 :0,
+        
     },
     row: {
         flexDirection: "row"
