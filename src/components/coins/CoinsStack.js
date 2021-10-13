@@ -17,8 +17,6 @@ const CoinsStack = () => {
                     shadowColor: Colors.blackPearl
                 },
                 headerTintColor: Colors.white
-                
-
             }}
         >
             <Stack.Screen

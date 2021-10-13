@@ -2,28 +2,47 @@ import React, { Component } from "react";
 import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import Http from 'cryptoTracker/src/libs/http';
 import CoinsItem from "./CoinsItem";
+import CoinsSearch from "./CoinSearch";
 import Colors from 'cryptoTracker/src/res/colors';
+
 
 class CoinsScreen extends Component {
 
     state = {
         coins: [],
+        allCoins: [],
         loading: false
     }
 
     componentDidMount = async () => {
 
+        this.getCoins();
+    }
+
+    //Metodo de consumo de API
+    getCoins = async () => {
         this.setState({ loading: true });
         const res = await Http.instance.get("https://api.coinlore.net/api/tickers/");
 
-        this.setState({ coins: res.data, loading: false });
+        this.setState({ coins: res.data, allCoins: res.data, loading: false });
     }
 
+    //Metodo encargado de la captura de detalle de cada moneda
     handlePress = (coin) => {
+        this.props.navigation.navigate('CoinDetail', { coin });
+    }
+    //Metodo encargado de la busqueda de la moneda del usuario tanto por nombre como por simbolo 
+    handleSearch = (query) => {
 
+        const { allCoins } = this.state;
 
-        this.props.navigation.navigate('CoinDetail',{ coin });
+        const coinsFiltered = allCoins.filter((coin) => {
 
+            return coin.name.toLowerCase().includes(query.toLowerCase()) ||
+                coin.symbol.toLowerCase().includes(query.toLowerCase());
+        });
+
+        this.setState({ coins: coinsFiltered });
     }
 
     render() {
@@ -32,6 +51,11 @@ class CoinsScreen extends Component {
 
         return (
             <View style={styles.container}>
+
+                <CoinsSearch onChange={this.handleSearch} />
+                
+
+
                 {loading ?
                     <ActivityIndicator
                         style={styles.loader}
