@@ -8,7 +8,11 @@
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import CoinsStack  from './src/components/coins/CoinsStack';
+import CoinsStack from './src/components/coins/CoinsStack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image } from 'react-native';
+import Colors from 'cryptoTracker/src/res/colors';
+import FavoritesStack from './src/components/favorites/FavoritesStack';
 
 //import type {Node} from 'react';
 
@@ -38,19 +42,55 @@ import CoinsStack  from './src/components/coins/CoinsStack';
   );
 };*/
 
-const App = ()  => {
-  /*const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };*/
+const Tabs = createBottomTabNavigator();
 
-  return (
-      <NavigationContainer>
-            <CoinsStack/>
-      </NavigationContainer>
-  );
+const App = () => {
+    /*const isDarkMode = useColorScheme() === 'dark';
+    const backgroundStyle = {
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    };*/
+
+    return (
+        <NavigationContainer>
+            <Tabs.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: Colors.blackPearl,
+                        shadowColor: Colors.blackPearl
+                    },
+                    headerTintColor: Colors.white
+                }}
+            >
+                <Tabs.Screen
+                    name="Coins"
+                    component={CoinsStack}
+                    options={{
+                        tabBarIcon: ({ size, color }) => (
+                            <Image
+                                style={{ tintColor: color, width: size, height: size }}
+                                source={require('./src/assets/img/bank.png')} />
+                        )
+
+                    }}
+                />
+
+
+                <Tabs.Screen
+                    name="Favorites"
+                    component={FavoritesStack}
+                    options={{
+                        tabBarIcon: ({ size, color }) => (
+                            <Image
+                                style={{ tintColor: color, width: size, height: size }}
+                                source={require('./src/assets/img/star.png')} />
+                        )
+
+                    }}
+                />
+            </Tabs.Navigator>
+
+        </NavigationContainer>
+    );
 };
-
-
 
 export default App;
